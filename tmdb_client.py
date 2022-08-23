@@ -3,7 +3,9 @@ import requests
 
 def _call_get_api(path):
     url = f"https://api.themoviedb.org/3/{path}"
-    return requests.get(url, headers=_get_auth_header()).json()
+    response = requests.get(url, headers=_get_auth_header())
+    response.raise_for_status()
+    return response.json()
 
 
 def _call_get_api_variable(path, variable):
@@ -11,8 +13,8 @@ def _call_get_api_variable(path, variable):
     return requests.get(url, headers=_get_auth_header()).json()
 
 
-def _call_get_api_cast_variable(path, variable, path2):
-    url = f"https://api.themoviedb.org/3/{path}/{variable}/{path2}"
+def _call_get_api_cast_variable(path1, variable, path2):
+    url = f"https://api.themoviedb.org/3/{path1}/{variable}/{path2}"
     return requests.get(url, headers=_get_auth_header()).json()
 
 
@@ -29,12 +31,16 @@ def get_poster_url(poster_api_path, size):
     return f"{base_url}{size}/{poster_api_path}"
 
 
-def get_popular_movies():
-    return _call_get_api("movie/popular")
+def get_list_type_movies(list_type):
+    types = ["top_rated", "upcoming", "popular", "now_playing"]
+    if list_type in types:
+        return _call_get_api(f"movie/{list_type}")
+    else:
+        return _call_get_api("movie/popular")
 
 
-def get_popular_movies_n(how_many):
-    data = get_popular_movies()
+def get_popular_movies_n(how_many, list_type):
+    data = get_list_type_movies(list_type)
     return data["results"][:how_many]
 
 
@@ -42,10 +48,10 @@ def get_single_movie(movie_id):
     return _call_get_api_variable("movie", movie_id)
 
 
-def get_single_movie_cast_call(movie_id):
+def _get_single_movie_cast_call(movie_id):
     return _call_get_api_cast_variable("movie", movie_id, "credits")
 
 
-def get_single_movie_cast(movie_id):
-    data = get_single_movie_cast_call(movie_id)
-    return data["cast"]
+def get_single_movie_cast(how_many, movie_id):
+    data = _get_single_movie_cast_call(movie_id)
+    return data["cast"][:how_many]

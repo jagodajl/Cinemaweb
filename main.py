@@ -10,14 +10,11 @@ def homepage():
     list_selection = ["popular", "upcoming", "top_rated", "now_playing"]
     selected_list = request.args.get('list_type')
 
-    if selected_list in list_selection:
-        movies = tmdb_client.get_popular_movies_n(8, selected_list)
-        return render_template("homepage.html", movies=movies, current_list=selected_list,
-                               list_selection=list_selection)
-    else:
+    if selected_list not in list_selection:
         selected_list = "popular"
-        movies = tmdb_client.get_popular_movies_n(8, selected_list)
-        return render_template("homepage.html", movies=movies, current_list=selected_list, list_selection=list_selection)
+
+    movies = tmdb_client.get_popular_movies_n(8, selected_list)
+    return render_template("homepage.html", movies=movies, current_list=selected_list, list_selection=list_selection)
 
 
 @app.route("/movie/<movie_id>")

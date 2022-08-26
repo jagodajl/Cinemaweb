@@ -31,15 +31,12 @@ def get_poster_url(poster_api_path, size):
     return f"{base_url}{size}/{poster_api_path}"
 
 
-def get_list_type_movies(list_type, types):
-    if list_type in types:
-        return _call_get_api(f"movie/{list_type}")
-    else:
-        return _call_get_api("movie/popular")
+def get_list_type_movies(list_type):
+    return _call_get_api(f"movie/{list_type}")
 
 
-def get_popular_movies_n(how_many, list_type, types):
-    data = get_list_type_movies(list_type, types)
+def get_popular_movies_n(how_many, list_type):
+    data = get_list_type_movies(list_type)
     return data["results"][:how_many]
 
 

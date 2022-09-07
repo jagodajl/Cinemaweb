@@ -22,10 +22,13 @@ def test_get_movies_list_type_popular():
 def test_movies_list(monkeypatch, list_type):
     api_mock = Mock(return_value={"results": []})
     monkeypatch.setattr("tmdb_client._call_get_api", api_mock)
-
+    expected_html_cut_off = f"href=\"/?list_type={list_type}\" class=\"btn btn-outline-info active\""
     with app.test_client() as client:
-        response = client.get("/")
+        response = client.get(f"/?list_type={list_type}")
         assert response.status_code == 200
+        html = str(response.get_data())
+        count = html.count(expected_html_cut_off)
+        assert count == 1
 
 
 def test_get_single_movie_cast():
@@ -41,3 +44,4 @@ def test_get_single_movie(monkeypatch):
     monkeypatch.setattr("tmdb_client.get_single_movie", single_movie_mock)
     single_movie = tmdb_client.get_single_movie(mock_single_movie_id)
     assert single_movie == mock_single_movie_id
+

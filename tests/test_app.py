@@ -3,7 +3,7 @@ import pytest
 from main import app
 from unittest.mock import Mock
 
-
+# test that checks if there is a status of 200 for each endpoint
 @pytest.mark.parametrize("list_type", ("top_rated", "upcoming", "popular", "now_playing"))
 def test_homepage(monkeypatch, list_type):
     api_mock = Mock(return_value={"results": []})

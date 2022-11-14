@@ -3,13 +3,10 @@ import tmdb_client
 
 # tests an external API that returns mocked values
 def test_get_movies_list(monkeypatch):
-    # Lista, którą będzie zwracać przysłonięte "zapytanie do API"
     mock_movies_list = ['Movie 1', 'Movie 2']
 
     requests_mock = Mock()
-    # Wynik wywołania zapytania do API
     response = requests_mock.return_value
-    # Przysłaniamy wynik wywołania metody .json()
     response.json.return_value = mock_movies_list
     monkeypatch.setattr("tmdb_client.requests.get", requests_mock)
 

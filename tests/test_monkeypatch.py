@@ -1,8 +1,8 @@
 from unittest.mock import Mock
+
 import tmdb_client
 
-# tests an external API that returns mocked values
-def test_get_movies_list(monkeypatch):
+def should_fetch_movie_list(monkeypatch):
     mock_movies_list = ['Movie 1', 'Movie 2']
 
     requests_mock = Mock()

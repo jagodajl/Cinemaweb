@@ -2,7 +2,7 @@ from unittest.mock import Mock
 
 import tmdb_client
 
-def should_fetch_movie_list(monkeypatch):
+def test_fetch_movie_list(monkeypatch):
     mock_movies_list = ['Movie 1', 'Movie 2']
 
     requests_mock = Mock()
